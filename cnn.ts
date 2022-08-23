@@ -74,21 +74,22 @@ export default class CNN {
     return this.model;
   }
 
-  async train(trainFeatures: any, trainLabels: any) {
+  async train(trainFeatures: any, trainLabels: any, testFeatures: any, testLabels: any) {
     this.trainFeatures = trainFeatures;
     this.trainLabels = trainLabels;
+    this.testFeatures = testFeatures;
+    this.testLabels = testLabels;
 
     return this.model.fit(this.trainFeatures, this.trainLabels, {
       epochs: this.options.epochs,
       shuffle: true,
+      validationData: [this.testFeatures, this.testLabels],
       callbacks: {
         onEpochEnd: (epoch, log) =>
           console.log(`Epoch ${epoch}, loss: ${log?.loss}`),
       },
     });
   }
-
-  test() {}
 
   predict() {}
 }
